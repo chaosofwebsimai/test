@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out;
+            position: absolute; /* Ensures the container is positioned over the iframe */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10; /* Ensures the container is on top of the iframe */
+        }
+
+        .container.active {
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #fullscreen-iframe {
+            display: block; /* The iframe should be present but covered by the container */
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="tap-container" class="container">
+        <h1></h1>
+        <p></p>
+    </div>
+
+    <iframe 
+        id="fullscreen-iframe" 
+        src="chaosofwebsimai.github.io" 
+        title="Embedded website"
+        allow="fullscreen"
+    ></iframe>
+
+    <script>
+        const tapContainer = document.getElementById('tap-container');
+        
+        function handleTap() {
+            // Hide the tap container with a transition
+            tapContainer.classList.add('active');
+
+            // Request native fullscreen for the host page
+            const doc = document.documentElement;
+            if (doc.requestFullscreen) {
+                doc.requestFullscreen();
+            } else if (doc.webkitRequestFullscreen) { /* Safari */
+                doc.webkitRequestFullscreen();
+            } else if (doc.msRequestFullscreen) { /* IE11 */
+                doc.msRequestFullscreen();
+            }
+        }
+
+        // Add event listeners for both click (desktop) and touchend (mobile)
+        // using the modern `{ once: true }` option for automatic cleanup.
+        document.addEventListener('click', handleTap, { once: true });
+        document.addEventListener('touchend', handleTap, { once: true });
+    </script>
+</body>
+</html>
